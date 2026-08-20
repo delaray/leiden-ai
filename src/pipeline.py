@@ -20,10 +20,10 @@ together in a single, repeatable pipeline.
 
 from dotenv import load_dotenv
 
-from cluster import add_representatives
-from hnsw import PipelineConfig, build_hnsw_index, embed_sentences
-from knn_graph import build_knn_graph
-from leiden import hierarchical_leiden
+from src.cluster import add_representatives
+from src.hnsw import PipelineConfig, build_hnsw_index, embed_sentences
+from src.knn_graph import build_knn_graph
+from src.leiden import hierarchical_leiden
 
 load_dotenv(override=True)
 

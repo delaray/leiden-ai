@@ -33,7 +33,7 @@ from pathlib import Path
 
 import numpy as np
 
-from hnsw import ClusterNode
+from src.hnsw import ClusterNode
 
 
 def add_representatives(
