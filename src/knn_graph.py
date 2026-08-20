@@ -1,18 +1,20 @@
-"""Build a weighted k-nearest-neighbor graph from sentence embeddings.
+"""
+Build a weighted k-nearest-neighbor graph from sentence embeddings.
 
-The HNSW index provides approximate nearest neighbors efficiently. This module converts those
-neighbor relations into a single undirected graph whose edges carry cosine-similarity weights.
-That graph is the input to the Leiden community detection algorithm used for hierarchical
-clustering.
+The HNSW index provides approximate nearest neighbors efficiently. This module
+converts those neighbor relations into a single undirected graph whose edges
+carry cosine-similarity weights. That graph is the input to the Leiden
+community detection algorithm used for hierarchical clustering.
 
-The algorithm works by querying the ANN index in batches, keeping only edges with sufficient
-similarity, canonicalizing each pair of nodes to avoid duplicates, and retaining the strongest
-observed similarity for each undirected edge.
+The algorithm works by querying the ANN index in batches, keeping only edges
+with sufficient similarity, canonicalizing each pair of nodes to avoid
+duplicates, and retaining the strongest observed similarity for each
+undirected edge.
 """
 
-# ============================================================
-# k-NN graph construction
-# ============================================================
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
 
 from __future__ import annotations
 
@@ -21,28 +23,40 @@ import igraph as ig
 import numpy as np
 from tqdm.auto import tqdm
 
+from src.hnsw import HNSWConfig
+from src.utils import timing
 
+# -----------------------------------------------------------------------------
+# k-NN graph construction
+# -----------------------------------------------------------------------------
+
+
+@timing
 def build_knn_graph(
     embeddings: np.ndarray,
     index: hnswlib.Index,
     config: HNSWConfig,
     query_batch_size: int = 10_000,
-) -> ig.Graph:
+     ) -> ig.Graph:
     """Construct a weighted undirected k-nearest-neighbor graph.
 
-    Each sentence is a node in the graph. For each query batch, the HNSW index returns the
-    approximate nearest neighbors for every vector. The function converts the directional neighbors
-    to an undirected graph by sorting each pair and storing the maximum similarity observed for
-    that edge. This creates a similarity graph that can be partitioned by graph-community methods.
+    Each sentence is a node in the graph. For each query batch, the HNSW index
+    returns the approximate nearest neighbors for every vector. The function
+    converts the directional neighbors to an undirected graph by sorting each
+    pair and storing the maximum similarity observed for that edge. This
+    creates a similarity graph that can be partitioned by graph-community
+    methods.
 
     Args:
         embeddings: embedding matrix for the corpus.
         index: HNSW index over those embeddings.
-        config: HNSW configuration containing k and similarity threshold settings.
+        config: HNSW configuration containing k and similarity threshold
+                settings.
         query_batch_size: number of vectors to query in each batch.
 
     Returns:
-        An igraph graph whose vertices are sentences and whose edge weights are cosine similarity.
+        An igraph graph whose vertices are sentences and whose edge weights
+        are cosine similarity.
     """
 
     n = len(embeddings)
@@ -127,3 +141,7 @@ def build_knn_graph(
     )
 
     return graph
+
+# -----------------------------------------------------------------------------
+# End of file
+# -----------------------------------------------------------------------------

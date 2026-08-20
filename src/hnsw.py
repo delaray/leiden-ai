@@ -48,6 +48,8 @@ import numpy as np
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
+from src.utils import timing
+
 # Load environment variables from .env file if present
 load_dotenv(override=True)
 
@@ -177,6 +179,7 @@ class ClusterNode:
 # Embeddings
 # ============================================================
 
+@timing
 def embed_sentences(
     sentences: list[str],
     config: EmbeddingConfig,
@@ -232,6 +235,7 @@ def embed_sentences(
 # HNSW
 # ============================================================
 
+@timing
 def build_hnsw_index(
     embeddings: np.ndarray,
     config: HNSWConfig,

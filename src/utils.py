@@ -14,6 +14,8 @@ load_ai_dataset
 
 import json
 import os
+from functools import wraps
+from time import time
 
 from dotenv import load_dotenv
 
@@ -27,6 +29,22 @@ BOOKS_DATASETS_DIR = os.path.join(BOOKS_DATA_DIR, 'datasets')
 
 # Load environment variables from .env file if present
 load_dotenv(override=True)
+
+
+# --------------------------------------------------------------
+# Basic Timing Decorator
+# --------------------------------------------------------------
+
+def timing(func):
+    @wraps(func)
+    def wrap(*args, **kw):
+        start = time()
+        result = func(*args, **kw)
+        end = time()
+        elapsed = round((end-start) / 60, 2)
+        print(f'{func.__name__} took {elapsed} minutes.')
+        return result
+    return wrap
 
 
 # -----------------------------------------------------------------------------

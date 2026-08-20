@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from src.cluster import print_tree, save_tree
 from src.hnsw import PipelineConfig
 from src.pipeline import run_pipeline
-from src.utils import load_ai_dataset
+from src.utils import load_ai_dataset, timing
 
 load_dotenv(override=True)
 
@@ -43,6 +43,7 @@ def parse_args() -> ArgumentParser:
 # Main Function
 # -----------------------------------------------------------------------------
 
+@timing
 def main() -> None:
     args = parse_args().parse_args()
 
