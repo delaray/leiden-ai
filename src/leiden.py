@@ -25,8 +25,7 @@ import numpy as np
 
 import igraph as ig
 import leidenalg as la
-from src.hnsw import LeidenConfig
-from src.hnsw import ClusterNode
+from src.hnsw import ClusterNode, LeidenConfig
 
 
 def leiden_partition(
