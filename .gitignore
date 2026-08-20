@@ -1,2 +1,4 @@
-leiden-ai.code-workspace
 .env
+leiden-ai.code-workspace
+__pycache__/
+src/__pycache__/
