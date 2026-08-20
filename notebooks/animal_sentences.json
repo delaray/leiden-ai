@@ -1,0 +1,674 @@
+[
+  {
+    "id": 0,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "The lion patrols a sunlit grassland while watching its pride."
+  },
+  {
+    "id": 1,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "A lion rests beneath an acacia after hunting on the open savanna."
+  },
+  {
+    "id": 2,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "Young lions practice stalking near the edge of the dry grassland."
+  },
+  {
+    "id": 3,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "The lion uses a powerful roar to communicate across its territory."
+  },
+  {
+    "id": 4,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "A lioness cooperates with her pride to hunt grazing animals."
+  },
+  {
+    "id": 5,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "The tawny lion blends into tall grass on the African plain."
+  },
+  {
+    "id": 6,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "At dusk, the lion follows animal trails through its savanna habitat."
+  },
+  {
+    "id": 7,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "lion",
+    "sentence": "The pride gathers around a water hole after the afternoon heat."
+  },
+  {
+    "id": 8,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "The elephant crosses the savanna in a close family herd."
+  },
+  {
+    "id": 9,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "An elephant uses its trunk to lift branches and gather leaves."
+  },
+  {
+    "id": 10,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "Young elephants stay beside their mothers near the grassland water hole."
+  },
+  {
+    "id": 11,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "The herd follows an experienced matriarch across the dry plain."
+  },
+  {
+    "id": 12,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "An elephant sprays dust over its skin beneath the hot savanna sun."
+  },
+  {
+    "id": 13,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "Large ears help the elephant release heat while walking on land."
+  },
+  {
+    "id": 14,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "Elephants communicate through deep rumbles that travel across the ground."
+  },
+  {
+    "id": 15,
+    "habitat": "terrestrial",
+    "animal_class": "mammals",
+    "species": "elephant",
+    "sentence": "The terrestrial herd remembers seasonal paths between distant water sources."
+  },
+  {
+    "id": 16,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "The snake warms its scales on a flat rock in the desert."
+  },
+  {
+    "id": 17,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "A snake moves silently between stones using muscular curves."
+  },
+  {
+    "id": 18,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "The desert snake shelters underground during the hottest hours."
+  },
+  {
+    "id": 19,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "A snake tastes the air with its forked tongue before hunting."
+  },
+  {
+    "id": 20,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "Dry scales protect the snake as it travels across sandy ground."
+  },
+  {
+    "id": 21,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "The reptile waits beside a burrow to ambush a small desert animal."
+  },
+  {
+    "id": 22,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "At sunset, the snake emerges from shade to search the rocky terrain."
+  },
+  {
+    "id": 23,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "snake",
+    "sentence": "The ground-dwelling snake sheds its old skin beside a warm stone."
+  },
+  {
+    "id": 24,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "The tortoise walks slowly across dry scrubland on sturdy legs."
+  },
+  {
+    "id": 25,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "A hard shell protects the tortoise from predators on land."
+  },
+  {
+    "id": 26,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "The desert tortoise digs a burrow to escape extreme afternoon heat."
+  },
+  {
+    "id": 27,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "A tortoise eats low grasses and flowers after seasonal rain."
+  },
+  {
+    "id": 28,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "The terrestrial reptile stores water while crossing arid ground."
+  },
+  {
+    "id": 29,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "Strong front legs help the tortoise excavate shelter in compact soil."
+  },
+  {
+    "id": 30,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "A long-lived tortoise rests beneath a shrub in the desert."
+  },
+  {
+    "id": 31,
+    "habitat": "terrestrial",
+    "animal_class": "reptiles",
+    "species": "tortoise",
+    "sentence": "The tortoise withdraws its head and limbs safely inside its shell."
+  },
+  {
+    "id": 32,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "The dolphin swims beside its pod in warm coastal water."
+  },
+  {
+    "id": 33,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "A dolphin uses clicks and echoes to locate fish beneath the waves."
+  },
+  {
+    "id": 34,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "Young dolphins learn coordinated hunting movements from the pod."
+  },
+  {
+    "id": 35,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "The marine mammal surfaces regularly to breathe through its blowhole."
+  },
+  {
+    "id": 36,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "A streamlined dolphin leaps above the ocean during fast travel."
+  },
+  {
+    "id": 37,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "Dolphins exchange whistles while moving through a shallow bay."
+  },
+  {
+    "id": 38,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "The pod surrounds a school of fish during a cooperative ocean hunt."
+  },
+  {
+    "id": 39,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "dolphin",
+    "sentence": "A dolphin steers with its flippers and powerful tail beneath the sea."
+  },
+  {
+    "id": 40,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "The whale migrates across the deep ocean with its calf."
+  },
+  {
+    "id": 41,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "A humpback whale sings long patterns beneath the sea surface."
+  },
+  {
+    "id": 42,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "The marine mammal rises to breathe and releases a visible spout."
+  },
+  {
+    "id": 43,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "A whale filters tiny krill from cold water using rows of baleen."
+  },
+  {
+    "id": 44,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "The enormous blue whale travels through an offshore feeding ground."
+  },
+  {
+    "id": 45,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "Whales communicate with low calls that carry across the ocean."
+  },
+  {
+    "id": 46,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "A mother whale guides her calf along a seasonal migration route."
+  },
+  {
+    "id": 47,
+    "habitat": "aquatic",
+    "animal_class": "mammals",
+    "species": "whale",
+    "sentence": "The aquatic giant dives deep before returning to the surface for air."
+  },
+  {
+    "id": 48,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "The shark cruises through open water using a powerful tail."
+  },
+  {
+    "id": 49,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "A shark detects faint electrical signals from prey beneath the sea."
+  },
+  {
+    "id": 50,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "Rows of sharp teeth help the ocean predator capture slippery fish."
+  },
+  {
+    "id": 51,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "The streamlined shark turns through a blue reef channel."
+  },
+  {
+    "id": 52,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "A dorsal fin steadies the shark as it swims across the current."
+  },
+  {
+    "id": 53,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "The marine fish follows scent trails through the coastal water."
+  },
+  {
+    "id": 54,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "A reef shark rests in a sheltered cave between evening hunts."
+  },
+  {
+    "id": 55,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "shark",
+    "sentence": "The shark's gills draw oxygen directly from surrounding seawater."
+  },
+  {
+    "id": 56,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "The salmon swims upstream from the ocean to its spawning river."
+  },
+  {
+    "id": 57,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "A school of young salmon shelters in cool freshwater pools."
+  },
+  {
+    "id": 58,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "The fish uses a strong tail to leap over a river obstacle."
+  },
+  {
+    "id": 59,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "Adult salmon navigate from the sea toward the stream where they hatched."
+  },
+  {
+    "id": 60,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "The silver fish feeds in coastal water before beginning its migration."
+  },
+  {
+    "id": 61,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "Salmon eggs develop beneath clean gravel in a cold riverbed."
+  },
+  {
+    "id": 62,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "The migrating fish fights a rapid current on its journey upstream."
+  },
+  {
+    "id": 63,
+    "habitat": "aquatic",
+    "animal_class": "fish",
+    "species": "salmon",
+    "sentence": "A salmon changes physiologically while moving between saltwater and freshwater."
+  },
+  {
+    "id": 64,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "The eagle circles high above a mountain valley on broad wings."
+  },
+  {
+    "id": 65,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "An eagle spots a small animal from far above the rocky ground."
+  },
+  {
+    "id": 66,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "Powerful wing feathers let the bird soar on rising warm air."
+  },
+  {
+    "id": 67,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "The eagle carries food to a nest built on a high cliff."
+  },
+  {
+    "id": 68,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "Sharp talons help the aerial hunter grasp prey during flight."
+  },
+  {
+    "id": 69,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "A golden eagle glides across the open sky without flapping."
+  },
+  {
+    "id": 70,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "The young eagle practices flying near its mountain nest."
+  },
+  {
+    "id": 71,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "eagle",
+    "sentence": "Keen eyesight guides the bird while it searches the valley below."
+  },
+  {
+    "id": 72,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "The owl flies silently through the forest during the night."
+  },
+  {
+    "id": 73,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "Soft flight feathers let an owl approach its prey without sound."
+  },
+  {
+    "id": 74,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "An owl watches the dark woodland from a high tree branch."
+  },
+  {
+    "id": 75,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "Large eyes help the nocturnal bird hunt in very low light."
+  },
+  {
+    "id": 76,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "The owl carries a captured mouse back to its hollow-tree nest."
+  },
+  {
+    "id": 77,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "A rotating head helps the bird scan the forest while perched."
+  },
+  {
+    "id": 78,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "At dusk, the owl leaves its roost and glides between trees."
+  },
+  {
+    "id": 79,
+    "habitat": "aerial",
+    "animal_class": "birds",
+    "species": "owl",
+    "sentence": "The aerial predator uses sensitive hearing to locate animals under leaves."
+  },
+  {
+    "id": 80,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "The butterfly flutters above a meadow filled with bright flowers."
+  },
+  {
+    "id": 81,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "A butterfly uncoils its proboscis to drink nectar while hovering."
+  },
+  {
+    "id": 82,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "Colorful wings carry the insect between flowering meadow plants."
+  },
+  {
+    "id": 83,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "The butterfly warms its wings in sunlight before taking flight."
+  },
+  {
+    "id": 84,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "A migrating butterfly travels long distances on gentle air currents."
+  },
+  {
+    "id": 85,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "The winged insect lands lightly on a purple garden flower."
+  },
+  {
+    "id": 86,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "A butterfly begins life as a caterpillar before growing wings."
+  },
+  {
+    "id": 87,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "butterfly",
+    "sentence": "Delicate scales create vivid patterns across the butterfly's wings."
+  },
+  {
+    "id": 88,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "The bee flies from flower to flower collecting pollen and nectar."
+  },
+  {
+    "id": 89,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "A honeybee returns to the hive and dances to describe a food source."
+  },
+  {
+    "id": 90,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "Rapid wing beats hold the bee above a flowering garden."
+  },
+  {
+    "id": 91,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "The aerial insect carries yellow pollen on hairs along its legs."
+  },
+  {
+    "id": 92,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "Worker bees cooperate to build wax comb inside their hive."
+  },
+  {
+    "id": 93,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "A bee follows floral scents while foraging across the meadow."
+  },
+  {
+    "id": 94,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "The pollinating insect drinks nectar before flying back to its colony."
+  },
+  {
+    "id": 95,
+    "habitat": "aerial",
+    "animal_class": "insects",
+    "species": "bee",
+    "sentence": "Honeybees use the sun as a compass during flights between flowers."
+  }
+]
