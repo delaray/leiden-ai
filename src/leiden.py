@@ -4,6 +4,8 @@
 
 from __future__ import annotations  # noqa: I001
 
+import numpy as np
+
 from hnsw import LeidenConfig
 import igraph as ig
 import leidenalg as la
