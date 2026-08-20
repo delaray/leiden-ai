@@ -1,3 +1,20 @@
+"""Graph clustering with the Leiden algorithm and recursive cluster splitting.
+
+This module turns the sentence similarity graph into a community hierarchy. Leiden is a
+modularity-optimizing algorithm that groups highly connected nodes into dense communities. By
+repeating this process on each subgraph, the project builds a hierarchical clustering tree that
+captures semantic structure at multiple scales.
+
+Functions
+---------
+leiden_partition
+    Runs a single Leiden partition on one graph.
+hierarchical_leiden
+    Recursively builds the cluster hierarchy from the root graph.
+_split_cluster
+    Repeats the partition process on each cluster until stopping conditions are met.
+"""
+
 # ============================================================
 # Leiden
 # ============================================================
@@ -16,10 +33,19 @@ def leiden_partition(
     resolution: float,
     config: LeidenConfig,
 ) -> list[list[int]]:
-    """
-    Partition an igraph graph using Leiden.
+    """Partition a graph into communities using the Leiden algorithm.
 
-    Returns lists of LOCAL vertex indices.
+    Leiden optimizes a modularity objective while preserving local density, which makes it well
+    suited to clustering sparse similarity graphs. The algorithm returns communities as lists of
+    local vertex indices within the current subgraph.
+
+    Args:
+        graph: the similarity graph to partition.
+        resolution: Leiden resolution parameter controlling cluster granularity.
+        config: clustering configuration, including iteration count and seed.
+
+    Returns:
+        A list of communities, where each community is a list of local graph vertex indices.
     """
 
     if graph.vcount() == 0:
@@ -53,8 +79,19 @@ def hierarchical_leiden(
     graph: ig.Graph,
     config: LeidenConfig,
 ) -> ClusterNode:
-    """
-    Build a recursive Leiden hierarchy over the graph.
+    """Build a recursive clustering hierarchy from the full graph.
+
+    The root cluster contains every sentence. The function then repeatedly applies Leiden
+    partitioning to subgraphs, creating child clusters for each detected community. As the
+    hierarchy deepens, the resolution increases so smaller, more specific semantic groups can be
+    discovered without losing the broader structure.
+
+    Args:
+        graph: the full sentence similarity graph.
+        config: Leiden and recursion settings.
+
+    Returns:
+        The root node of the hierarchical cluster tree.
     """
 
     all_indices = np.arange(
@@ -83,8 +120,17 @@ def _split_cluster(
     node: ClusterNode,
     config: LeidenConfig,
 ) -> None:
-    """
-    Recursively partition one ClusterNode.
+    """Split one cluster node into child communities when the stopping conditions allow it.
+
+    The function creates an induced subgraph for the cluster's members, applies Leiden
+    partitioning, filters out tiny children, and then recurses into each accepted child cluster.
+    This yields a hierarchical tree where each level reveals increasingly specific semantic
+    groupings.
+
+    Args:
+        graph: the global graph containing all sentence relationships.
+        node: the current cluster node to subdivide.
+        config: recursive partitioning settings.
     """
 
     # --------------------------------------------------------

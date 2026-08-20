@@ -1,3 +1,44 @@
+"""Embedding, HNSW indexing, and cluster-tree configuration for hierarchical
+semantic clustering.
+
+This module turns raw sentences into dense vector embeddings, builds a
+cosine-similarity nearest-neighbor index with HNSW, and defines the
+configuration objects used throughout the pipeline. The HNSW step approximates
+k-nearest neighbors efficiently in high-dimensional space, which is then
+converted into a graph for graph-based clustering.
+
+Classes
+-------
+EmbeddingConfig
+    Settings for the sentence embedding model and output normalization.
+
+HNSWConfig
+    Parameters controlling the approximate nearest-neighbor index.
+
+LeidenConfig
+    Settings for the Leiden community-detection algorithm and hierarchy depth.
+
+PipelineConfig
+    Convenience container for the embedding, HNSW, and Leiden configuration
+    blocks.
+
+ClusterNode
+    A node in the hierarchical cluster tree containing a set of sentence
+    indices and children.
+
+Functions
+---------
+embed_sentences
+    Encodes a list of sentences into a normalized float32 embedding matrix.
+
+build_hnsw_index
+    Builds an HNSW index over the embeddings so similarity queries can be
+    answered quickly.
+"""
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -11,13 +52,18 @@ from sentence_transformers import SentenceTransformer
 load_dotenv(override=True)
 
 
-
-# ============================================================
-# Configuration
-# ============================================================
-
+# -----------------------------------------------------------------------------
+# HNSW and clustering configuration
+# -----------------------------------------------------------------------------
 @dataclass
 class EmbeddingConfig:
+    """Configuration for sentence embedding generation.
+
+    The model is used to map each sentence into a semantic vector space.
+    Normalization is enabled so cosine similarity can be computed efficiently
+    with dot products.
+    """
+
     model_name: str = "sentence-transformers/all-mpnet-base-v2"
     batch_size: int = 256
     device: str = "cuda"
@@ -26,6 +72,13 @@ class EmbeddingConfig:
 
 @dataclass
 class HNSWConfig:
+    """Configuration for the HNSW approximate nearest-neighbor index.
+
+    HNSW builds a graph with layered long-range links, allowing fast
+    approximate nearest neighbor queries even for large embedding sets.
+    The graph stores cosine-similarity relationships between sentence vectors.
+    """
+
     k: int = 30
 
     # HNSW construction parameters
@@ -41,6 +94,14 @@ class HNSWConfig:
 
 @dataclass
 class LeidenConfig:
+    """Configuration for the Leiden clustering stage and recursive hierarchy.
+
+    Leiden is a graph-based community detection algorithm that partitions
+    nodes into dense, semantically related communities. The resolution
+    parameter controls partition granularity, while the hierarchy settings
+    decide when to keep splitting sub-clusters.
+    """
+
     # Initial Leiden resolution
     resolution: float = 0.5
 
@@ -63,6 +124,10 @@ class LeidenConfig:
 
 @dataclass
 class PipelineConfig:
+    """
+    Top-level configuration bundle for the end-to-end clustering pipeline.
+    """
+
     embedding: EmbeddingConfig = field(default_factory=EmbeddingConfig)
     hnsw: HNSWConfig = field(default_factory=HNSWConfig)
     leiden: LeidenConfig = field(default_factory=LeidenConfig)
@@ -74,22 +139,37 @@ class PipelineConfig:
 
 @dataclass
 class ClusterNode:
+    """Node in the hierarchical clustering tree.
+
+    Each node represents a set of sentence indices that belong to the same
+    semantic cluster.
+    The tree is built recursively: every cluster can be subdivided into child
+    clusters based on graph community structure. The node stores both the raw
+    sentence membership and a set of representative sentence indices for
+    summary output.
+    """
+
     cluster_id: str
     depth: int
     indices: np.ndarray
     resolution: float
 
-    children: list["ClusterNode"] = field(default_factory=list)
+    children: list[ClusterNode] = field(default_factory=list)
 
     # Useful descriptive information
     representative_indices: list[int] = field(default_factory=list)
 
     @property
     def size(self) -> int:
+        """Return the number of sentence indices contained in this cluster."""
         return len(self.indices)
 
     @property
     def is_leaf(self) -> bool:
+        """
+        Return True when this node has no children and therefore terminates\
+        a branch.
+        """
         return len(self.children) == 0
 
 
@@ -101,8 +181,21 @@ def embed_sentences(
     sentences: list[str],
     config: EmbeddingConfig,
 ) -> np.ndarray:
-    """
-    Embed all sentences and return an N x D float32 NumPy matrix.
+    """Encode a list of sentences into a dense embedding matrix.
+
+    The function loads a SentenceTransformer model, runs batch inference over
+    the corpus, and returns an N x D float32 array. When configured,
+    embeddings are normalized so that cosine similarity can be computed
+    efficiently using dot products.
+
+    Args:
+        sentences: text snippets to embed.
+        config: embedding model settings, including the model name, device,
+                batch size, and whether to normalize vectors.
+
+    Returns:
+        A NumPy array of shape (n_sentences, embedding_dim) containing
+        normalized embeddings.
     """
 
     print(f"Loading embedding model: {config.model_name}")
@@ -144,7 +237,23 @@ def build_hnsw_index(
     config: HNSWConfig,
 ) -> hnswlib.Index:
     """
-    Construct an HNSW cosine index.
+    Construct a hierarchical navigable small-world graph over the
+    embedding set.
+
+    HNSW organizes vectors into a layered graph where each node has
+    short-range links for local structure and long-range links for efficient
+    navigation. The algorithm approximates the k-nearest neighbors much faster
+    than exhaustive search while retaining high recall, making it suitable for
+    large semantic corpora.
+
+    Args:
+        embeddings: matrix of sentence vectors.
+        config: HNSW settings such as the number of neighbors and
+                search efficiency.
+
+    Returns:
+        A configured hnswlib index ready for approximate nearest-neighbor
+        queries.
     """
 
     n, dim = embeddings.shape
