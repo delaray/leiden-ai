@@ -71,3 +71,18 @@ def test_build_hnsw_index_initializes_index(monkeypatch):
     assert index.max_elements == 2
     assert index.num_threads == 3
     assert index.ef == max(10, 2 + 1)
+
+
+def test_embedding_default_device_falls_back_to_cpu_without_cuda(monkeypatch):
+    calls = {}
+
+    class FakeTorch:
+        @staticmethod
+        def cuda_is_available():
+            return False
+
+    monkeypatch.setattr(hnsw, "torch", FakeTorch)
+
+    config = hnsw.EmbeddingConfig()
+
+    assert config.device == "cpu"

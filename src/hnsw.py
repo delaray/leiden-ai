@@ -45,6 +45,7 @@ from dataclasses import dataclass, field
 
 import hnswlib
 import numpy as np
+import torch
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
@@ -52,6 +53,24 @@ from src.utils import timing
 
 # Load environment variables from .env file if present
 load_dotenv(override=True)
+
+
+def _resolve_device(device: str) -> str:
+    """Return a safe device string for the current machine.
+
+    CUDA is only valid when PyTorch was built with CUDA support and the
+    current runtime can access a GPU. Otherwise, fall back to CPU to avoid
+    the AssertionError raised by SentenceTransformer/torch when CUDA is
+    requested but not available.
+    """
+    if device == "cuda":
+        if torch.cuda.is_available():
+            return "cuda"
+        print("CUDA requested but not available on this system; using CPU instead.")
+        return "cpu"
+    if device == "cpu":
+        return "cpu"
+    raise ValueError(f"Unsupported device '{device}'. Use 'cpu' or 'cuda'.")
 
 
 # -----------------------------------------------------------------------------
@@ -70,6 +89,9 @@ class EmbeddingConfig:
     batch_size: int = 256
     device: str = "cuda"
     normalize: bool = True
+
+    def __post_init__(self) -> None:
+        self.device = _resolve_device(self.device)
 
 
 @dataclass
@@ -200,6 +222,8 @@ def embed_sentences(
         A NumPy array of shape (n_sentences, embedding_dim) containing
         normalized embeddings.
     """
+
+    config.device = _resolve_device(config.device)
 
     print(f"Loading embedding model: {config.model_name}")
 

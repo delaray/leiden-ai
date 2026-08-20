@@ -26,6 +26,7 @@ import numpy as np
 import igraph as ig
 import leidenalg as la
 from src.hnsw import LeidenConfig
+from src.hnsw import ClusterNode
 
 
 def leiden_partition(
@@ -78,7 +79,7 @@ def leiden_partition(
 def hierarchical_leiden(
     graph: ig.Graph,
     config: LeidenConfig,
-) -> ClusterNode:
+     ) -> ClusterNode:
     """Build a recursive clustering hierarchy from the full graph.
 
     The root cluster contains every sentence. The function then repeatedly applies Leiden
