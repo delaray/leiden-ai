@@ -5,7 +5,7 @@ from torch import device
 
 from src.cluster import print_tree, save_tree
 from src.hnsw import PipelineConfig
-from src.pipeline import run_pipeline
+from src.pipeline import DEFAULT_CONFIG_FILE, run_pipeline
 from src.utils import load_ai_dataset, timing
 
 load_dotenv(override=True)
@@ -16,14 +16,15 @@ load_dotenv(override=True)
 # -------------------------------------------------------------------------------
 
 def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
-                        device: str = "cpu",
+                        device: str | None = None,
                         output_path: str = "topic_hierarchy.json",
                         verbose: bool = True
                         ) -> dict[str, object]:
     """
     Run the full Leiden topic-clustering pipeline on a corpus of sentences.
     """
-    config.embedding.device = device
+    if device is not None:
+        config.embedding.device = device
     result = run_pipeline(sentences, config)
 
     if verbose:
@@ -52,6 +53,11 @@ def parse_args() -> ArgumentParser:
         description="Run the Leiden topic-clustering pipeline on a dataset.",
     )
     parser.add_argument(
+        "--config-file",
+        default=str(DEFAULT_CONFIG_FILE),
+        help="YAML pipeline configuration file. Defaults to configs/config.yaml.",
+    )
+    parser.add_argument(
         "dataset_name",
         nargs="?",
         default="ai_dataset.json",
@@ -66,8 +72,8 @@ def parse_args() -> ArgumentParser:
     parser.add_argument(
         "--device",
         choices=["cpu", "cuda"],
-        default="cpu",
-        help="Device to use for sentence embeddings. Default is CPU.",
+        default=None,
+        help="Override the embedding device from the configuration file.",
     )
     return parser
 
@@ -88,7 +94,7 @@ def main() -> None:
         raise ValueError("No sentences were loaded from dataset: "
                          f"{args.dataset_name}")
 
-    config = PipelineConfig()
+    config = PipelineConfig.from_yaml(args.config_file)
     run_leiden_pipeline(
         sentences=sentences,
         config=config,

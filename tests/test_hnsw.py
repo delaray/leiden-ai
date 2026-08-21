@@ -86,3 +86,33 @@ def test_embedding_default_device_falls_back_to_cpu_without_cuda(monkeypatch):
     config = hnsw.EmbeddingConfig()
 
     assert config.device == "cpu"
+
+
+def test_pipeline_config_loads_yaml_sections(tmp_path):
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text(
+        """
+embedding:
+  model_name: test-model
+  batch_size: 8
+  device: cpu
+  normalize: false
+hnsw:
+  k: 7
+  min_similarity: 0.4
+leiden:
+  resolution: 0.8
+  max_depth: 3
+""",
+        encoding="utf-8",
+    )
+
+    config = hnsw.PipelineConfig.from_yaml(config_file)
+
+    assert config.embedding.model_name == "test-model"
+    assert config.embedding.batch_size == 8
+    assert config.embedding.normalize is False
+    assert config.hnsw.k == 7
+    assert config.hnsw.min_similarity == 0.4
+    assert config.leiden.resolution == 0.8
+    assert config.leiden.max_depth == 3

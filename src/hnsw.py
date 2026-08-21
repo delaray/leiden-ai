@@ -42,10 +42,13 @@ build_hnsw_index
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Mapping
 
 import hnswlib
 import numpy as np
 import torch
+import yaml
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
@@ -155,6 +158,32 @@ class PipelineConfig:
     embedding: EmbeddingConfig = field(default_factory=EmbeddingConfig)
     hnsw: HNSWConfig = field(default_factory=HNSWConfig)
     leiden: LeidenConfig = field(default_factory=LeidenConfig)
+
+    @classmethod
+    def from_yaml(cls, path: str | Path) -> PipelineConfig:
+        """Load pipeline settings from a YAML file."""
+        config_path = Path(path)
+        with config_path.open(encoding="utf-8") as config_file:
+            values = yaml.safe_load(config_file) or {}
+
+        if not isinstance(values, Mapping):
+            raise ValueError(
+                f"Pipeline config must be a YAML mapping: {config_path}"
+            )
+
+        def section(name: str) -> dict[str, Any]:
+            section_values = values.get(name, {})
+            if not isinstance(section_values, Mapping):
+                raise ValueError(
+                    f"Pipeline config section '{name}' must be a mapping"
+                )
+            return dict(section_values)
+
+        return cls(
+            embedding=EmbeddingConfig(**section("embedding")),
+            hnsw=HNSWConfig(**section("hnsw")),
+            leiden=LeidenConfig(**section("leiden")),
+        )
 
 
 # ============================================================

@@ -18,6 +18,8 @@ together in a single, repeatable pipeline.
 # leiden-ai: Hierarchical clustering of sentences using HNSW and Leiden
 # *****************************************************************************
 
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 from src.cluster import add_representatives
@@ -26,6 +28,8 @@ from src.knn_graph import build_knn_graph
 from src.leiden import hierarchical_leiden
 
 load_dotenv(override=True)
+
+DEFAULT_CONFIG_FILE = Path(__file__).resolve().parents[1] / "configs" / "config.yaml"
 
 
 # ------------------------------------------------------------------------------
@@ -55,7 +59,7 @@ def run_pipeline(
     """
 
     if config is None:
-        config = PipelineConfig()
+        config = PipelineConfig.from_yaml(DEFAULT_CONFIG_FILE)
 
     # --------------------------------------------------------
     # Basic validation

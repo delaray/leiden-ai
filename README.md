@@ -75,6 +75,9 @@ export DATA_DIR=/path/to/data
 uv run python run_leiden.py corpus.json --device cpu --output topic_hierarchy.json
 ```
 
+Pipeline settings are loaded from `configs/config.yaml` by default. Supply a
+different file with `--config-file path/to/config.yaml`.
+
 Or call the Python API directly:
 
 ```python
@@ -129,6 +132,7 @@ print_tree(result["tree"], result["sentences"])
 
 ```text
 leiden-ai/
+├── configs/                Default pipeline configuration
 ├── docs/                   Algorithm and setup guides
 ├── notebooks/              Reproducible worked example and sample data
 ├── src/                    Pipeline implementation
