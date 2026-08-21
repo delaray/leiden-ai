@@ -56,9 +56,10 @@ def load_books_dataset(file_path: str, dataset_name: str,
                        ) -> list[str]:
     """Load a JSON file of sentences into memory.
 
-    The dataset is expected to be a list of strings, one sentence per item. The optional
-    max_len filter removes sentences longer than the given character count, which is useful for
-    keeping corpora consistent before embedding.
+    The dataset is expected to be a list of strings, one sentence per item.
+    The optional max_len filter removes sentences longer than the given
+    character count, which is useful for keeping corpora consistent before
+    embedding.
 
     Args:
         file_path: path to the JSON file containing the sentence list.
@@ -66,7 +67,8 @@ def load_books_dataset(file_path: str, dataset_name: str,
         max_len: optional maximum sentence length to retain.
 
     Returns:
-        A list of sentences loaded from the file, or an empty list if loading fails.
+        A list of sentences loaded from the file, or an empty list if
+        loading fails.
     """
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -74,12 +76,16 @@ def load_books_dataset(file_path: str, dataset_name: str,
         if max_len is not None:
             sentences = [s for s in sentences if len(s) <= max_len]
         print(f"Loaded {len(sentences)} sentences from:\n{file_path}")
+        sentences = [s.strip() for s in sentences if s and s.strip()]
+
+        # Remove duplicates
+        sentences = list(set(sentences))
+        
         return sentences
 
     except (OSError, json.JSONDecodeError) as e:
         print(f"Error loading dataset {dataset_name} from {file_path}\n{e}")
         return []
-
 
 
 # ---------------------------------------------------------------------------

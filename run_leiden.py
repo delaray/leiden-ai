@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 
 from dotenv import load_dotenv
+from torch import device
 
 from src.cluster import print_tree, save_tree
 from src.hnsw import PipelineConfig
@@ -8,6 +9,38 @@ from src.pipeline import run_pipeline
 from src.utils import load_ai_dataset, timing
 
 load_dotenv(override=True)
+
+
+# -------------------------------------------------------------------------------\
+# Run Leiden Pipeline
+# -------------------------------------------------------------------------------
+
+def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
+                        device: str = "cpu",
+                        output_path: str = "topic_hierarchy.json",
+                        verbose: bool = True
+                        ) -> dict[str, object]:
+    """
+    Run the full Leiden topic-clustering pipeline on a corpus of sentences.
+    """
+    config.embedding.device = device
+    result = run_pipeline(sentences, config)
+
+    if verbose:
+        print_tree(
+            result["tree"],
+            result["sentences"],
+        )
+
+    save_tree(
+        result["tree"],
+        result["sentences"],
+        output_path,
+    )
+
+    print(f"\nSaved topic tree to: {output_path}")
+
+    return result
 
 
 # -----------------------------------------------------------------------------
@@ -56,21 +89,12 @@ def main() -> None:
                          f"{args.dataset_name}")
 
     config = PipelineConfig()
-    config.embedding.device = args.device
-    result = run_pipeline(sentences, config)
-
-    print_tree(
-        result["tree"],
-        result["sentences"],
+    run_leiden_pipeline(
+        sentences=sentences,
+        config=config,
+        device=args.device,
+        output_path=args.output,
     )
-
-    save_tree(
-        result["tree"],
-        result["sentences"],
-        args.output,
-    )
-
-    print(f"Saved topic tree to: {args.output}")
 
 
 if __name__ == "__main__":
