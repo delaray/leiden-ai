@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 
 from dotenv import load_dotenv
-from torch import device
 
 from src.cluster import print_tree, save_tree
 from src.hnsw import PipelineConfig
