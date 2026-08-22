@@ -20,3 +20,12 @@ leiden:
   min_child_size: 30
   n_iterations: 4
   seed: 42
+
+labeling:
+  ollama_url: http://192.168.1.32:11434
+  model: qwen3.8:27b
+  n_examples: 8
+  max_label_words: 6
+  max_depth: null
+  min_cluster_size: 20
+  timeout: 120

@@ -29,14 +29,12 @@ save_tree
 # ============================================================
 
 import json
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
 import requests
 
-from src.hnsw import ClusterNode
+from src.hnsw import ClusterNode, LabelingConfig
 
 
 def add_representatives(
@@ -110,27 +108,6 @@ def add_representatives(
 # ============================================================
 # Cluster labeling with Ollama
 # ============================================================
-
-@dataclass
-class LabelingConfig:
-    ollama_url: str = "http://192.168.1.32:11434"
-    model: str = "qwen3.8:27b"
-
-    # Number of representative sentences passed to the LLM
-    n_examples: int = 8
-
-    # Keep labels concise
-    max_label_words: int = 6
-
-    # Label clusters only down to this depth.
-    # Set to None to label all levels.
-    max_depth: Optional[int] = None
-
-    # Skip tiny clusters if desired
-    min_cluster_size: int = 20
-
-    timeout: int = 120
-
 
 # -----------------------------------------------------------------------------
 # Generate Cluster Label

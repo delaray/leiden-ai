@@ -6,7 +6,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.hnsw import PipelineConfig
+from src.hnsw import LabelingConfig, PipelineConfig
 from src.pipeline import run_pipeline
 
 
@@ -24,6 +24,8 @@ class DummyIndex:
 
 
 def test_run_pipeline_returns_expected_structure(monkeypatch):
+    events = []
+
     def fake_embed_sentences(sentences, config):
         return np.eye(len(sentences), 2, dtype=np.float32)
 
@@ -45,16 +47,39 @@ def test_run_pipeline_returns_expected_structure(monkeypatch):
 
     def fake_add_representatives(node, embeddings, n_representatives=5):
         node.representative_indices = [0]
+        events.append("represented")
+
+    def fake_label_cluster_tree(node, sentences, config):
+        assert node.representative_indices == [0]
+        node.label = "Test label"
+        events.append("labeled")
 
     monkeypatch.setattr("src.pipeline.embed_sentences", fake_embed_sentences)
     monkeypatch.setattr("src.pipeline.build_hnsw_index", fake_build_hnsw_index)
     monkeypatch.setattr("src.pipeline.build_knn_graph", fake_build_knn_graph)
     monkeypatch.setattr("src.pipeline.hierarchical_leiden", fake_hierarchical_leiden)
     monkeypatch.setattr("src.pipeline.add_representatives", fake_add_representatives)
+    monkeypatch.setattr("src.pipeline.label_cluster_tree", fake_label_cluster_tree)
 
-    result = run_pipeline(["first", "second"])
+    config = PipelineConfig(labeling=LabelingConfig(min_cluster_size=1))
+    result = run_pipeline(["first", "second"], config)
 
     assert result["sentences"] == ["first", "second"]
     assert result["embeddings"].shape == (2, 2)
     assert result["graph"]["nodes"] == 2
     assert result["tree"].cluster_id == "root"
+    assert result["tree"].label == "Test label"
+    assert events == ["represented", "labeled"]
+
+
+def test_pipeline_config_loads_labeling_section(tmp_path):
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        "labeling:\n  model: test-model\n  min_cluster_size: 3\n",
+        encoding="utf-8",
+    )
+
+    config = PipelineConfig.from_yaml(config_path)
+
+    assert config.labeling.model == "test-model"
+    assert config.labeling.min_cluster_size == 3

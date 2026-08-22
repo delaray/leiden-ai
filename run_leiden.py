@@ -24,6 +24,7 @@ def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
     """
     if device is not None:
         config.embedding.device = device
+
     result = run_pipeline(sentences, config)
 
     if verbose:

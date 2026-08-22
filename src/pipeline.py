@@ -22,7 +22,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from src.cluster import LabelingConfig, add_representatives, label_cluster_tree
+from src.cluster import add_representatives, label_cluster_tree
 from src.hnsw import PipelineConfig, build_hnsw_index, embed_sentences
 from src.knn_graph import build_knn_graph
 from src.leiden import hierarchical_leiden
@@ -110,8 +110,6 @@ def run_pipeline(
         config.leiden,
     )
 
-    label_cluster_tree(tree, sentences, LabelingConfig())
-
     # --------------------------------------------------------
     # 5. Representative sentences
     # --------------------------------------------------------
@@ -121,6 +119,9 @@ def run_pipeline(
         embeddings,
         n_representatives=5,
     )
+
+    # Labels depend on the representative sentences populated above.
+    label_cluster_tree(tree, sentences, config.labeling)
 
     return {
         "sentences": sentences,

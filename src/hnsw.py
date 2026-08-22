@@ -18,9 +18,12 @@ HNSWConfig
 LeidenConfig
     Settings for the Leiden community-detection algorithm and hierarchy depth.
 
+LabelingConfig
+    Settings for generating human-readable labels for cluster nodes.
+
 PipelineConfig
-    Convenience container for the embedding, HNSW, and Leiden configuration
-    blocks.
+    Convenience container for the embedding, HNSW, Leiden, and labeling
+    configuration blocks.
 
 ClusterNode
     A node in the hierarchical cluster tree containing a set of sentence
@@ -151,6 +154,19 @@ class LeidenConfig:
 
 
 @dataclass
+class LabelingConfig:
+    """Configuration for labeling cluster nodes with an Ollama model."""
+
+    ollama_url: str = "http://192.168.1.32:11434"
+    model: str = "qwen3.8:27b"
+    n_examples: int = 8
+    max_label_words: int = 6
+    max_depth: int | None = None
+    min_cluster_size: int = 20
+    timeout: int = 120
+
+
+@dataclass
 class PipelineConfig:
     """
     Top-level configuration bundle for the end-to-end clustering pipeline.
@@ -159,6 +175,7 @@ class PipelineConfig:
     embedding: EmbeddingConfig = field(default_factory=EmbeddingConfig)
     hnsw: HNSWConfig = field(default_factory=HNSWConfig)
     leiden: LeidenConfig = field(default_factory=LeidenConfig)
+    labeling: LabelingConfig = field(default_factory=LabelingConfig)
 
     @classmethod
     def from_yaml(cls, path: str | Path) -> PipelineConfig:
@@ -184,6 +201,7 @@ class PipelineConfig:
             embedding=EmbeddingConfig(**section("embedding")),
             hnsw=HNSWConfig(**section("hnsw")),
             leiden=LeidenConfig(**section("leiden")),
+            labeling=LabelingConfig(**section("labeling")),
         )
 
 
