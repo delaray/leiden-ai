@@ -29,9 +29,12 @@ save_tree
 # ============================================================
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
+import requests
 
 from src.hnsw import ClusterNode
 
@@ -103,43 +106,209 @@ def add_representatives(
         )
 
 
+
+# ============================================================
+# Cluster labeling with Ollama
+# ============================================================
+
+@dataclass
+class LabelingConfig:
+    ollama_url: str = "http://192.168.1.32:11434"
+    model: str = "qwen3.8:27b"
+
+    # Number of representative sentences passed to the LLM
+    n_examples: int = 8
+
+    # Keep labels concise
+    max_label_words: int = 6
+
+    # Label clusters only down to this depth.
+    # Set to None to label all levels.
+    max_depth: Optional[int] = None
+
+    # Skip tiny clusters if desired
+    min_cluster_size: int = 20
+
+    timeout: int = 120
+
+
+# -----------------------------------------------------------------------------
+# Generate Cluster Label
+# -----------------------------------------------------------------------------
+
+def generate_cluster_label(
+    representative_sentences: list[str],
+    config: LabelingConfig,
+    parent_label: str | None = None,
+) -> str:
+    """
+    Ask an Ollama model to produce a concise semantic label
+    describing a cluster.
+    """
+
+    examples = "\n".join(
+        f"- {sentence}"
+        for sentence in representative_sentences[:config.n_examples]
+    )
+
+    parent_context = ""
+
+    if parent_label:
+        parent_context = (
+            f"\nThe parent topic is: {parent_label}\n"
+            "The new label should describe the more specific "
+            "subtopic represented by these sentences.\n"
+        )
+
+    prompt = f"""
+        You are labeling semantic clusters extracted from a technical corpus.
+
+        Your task is to identify the single concept or topic that best
+        describes the following sentences.
+
+        {parent_context}
+
+        Representative sentences:
+
+        {examples}
+
+        Requirements:
+
+        - Return ONLY the label.
+        - Do not explain your answer.
+        - Use at most {config.max_label_words} words.
+        - Prefer a precise technical concept over a generic description.
+        - Do not use phrases such as "Discussion of", "Topics about",
+        "Information on", or "Sentences about".
+        - Use standard terminology when possible.
+
+        Examples of good labels:
+
+        Retrieval-Augmented Generation
+        Grouped Query Attention
+        Policy Gradient Methods
+        Vector Similarity Search
+        Transformer Positional Encoding
+        Knowledge Graph Construction
+        Contrastive Representation Learning
+
+        Label:
+        """.strip()
+
+    response = requests.post(
+        f"{config.ollama_url}/api/generate",
+        json={
+            "model": config.model,
+            "prompt": prompt,
+            "stream": False,
+
+            # Low temperature is desirable because labeling
+            # should be deterministic rather than creative.
+            "options": {
+                "temperature": 0.1,
+            },
+        },
+        timeout=config.timeout,
+    )
+
+    response.raise_for_status()
+
+    label = response.json()["response"].strip()
+
+    # Defensive cleanup in case the model adds quotes.
+    label = label.strip('"').strip("'").strip()
+
+    return label
+
+
+# ------------------------------------------------------------------------------
+# Label Cluster Tree
+# ------------------------------------------------------------------------------
+
+def label_cluster_tree(
+    node: ClusterNode,
+    sentences: list[str],
+    config: LabelingConfig,
+    parent_label: str | None = None,
+) -> None:
+    """
+    Recursively generate human-readable labels for every cluster.
+    """
+
+    if (
+        config.max_depth is not None
+        and node.depth > config.max_depth
+    ):
+        return
+
+    if node.size < config.min_cluster_size:
+        return
+
+    representative_sentences = [
+        sentences[i]
+        for i in node.representative_indices[
+            :config.n_examples
+        ]
+    ]
+
+    if representative_sentences:
+
+        try:
+            node.label = generate_cluster_label(
+                representative_sentences,
+                config=config,
+                parent_label=parent_label,
+            )
+
+        except Exception as exc:  # noqa: BLE001
+
+            print(
+                f"Could not label {node.cluster_id}: {exc}"
+            )
+
+            node.label = None
+
+    for child in node.children:
+
+        label_cluster_tree(
+            child,
+            sentences=sentences,
+            config=config,
+            parent_label=node.label,
+        )
+
+
+# -----------------------------------------------------------------------------
+# Print Cluster Tree
+# -----------------------------------------------------------------------------
+
 def print_tree(
     node: ClusterNode,
     sentences: list[str],
     max_examples: int = 2,
-    ) -> None:
-    """Print the cluster hierarchy as a nested summary.
-
-    Each node is printed with its cluster id and sentence count, followed by
-    representative example sentences from that cluster. The recursion walks
-    the tree depth-first so the user can inspect the semantic grouping from
-    broad topics to finer subtopics.
-
-    Args:
-        node: current cluster node to print.
-        sentences: original sentence list used to recover representative text.
-        max_examples: maximum number of representative sentences to show
-        per cluster.
-    """
+) -> None:
 
     indent = "    " * node.depth
 
+    label = node.label or "Unlabeled"
+
     print(
         f"{indent}"
-        f"{node.cluster_id} "
-        f"[{node.size:,} sentences]"
+        f"{label} "
+        f"[{node.cluster_id}, "
+        f"{node.size:,} sentences]"
     )
 
     for idx in node.representative_indices[
         :max_examples
     ]:
-        sentence = sentences[idx]
 
         print(
-            f"{indent}    • {sentence}"
+            f"{indent}    • {sentences[idx]}"
         )
 
     for child in node.children:
+
         print_tree(
             child,
             sentences,
@@ -155,26 +324,16 @@ def node_to_dict(
     node: ClusterNode,
     sentences: list[str],
 ) -> dict:
-    """Convert a cluster tree into a nested dictionary suitable for
-    JSON export.
-
-    The returned structure includes the cluster identifier, depth, size,
-    resolution, representative sentence text, and child nodes. Leaves keep
-    their sentence indices while internal nodes store nested child
-    dictionaries for a full hierarchical representation.
-
-    Args:
-        node: cluster node to serialize.
-        sentences: original sentence list used to resolve representative text.
-
-    Returns:
-        A nested dictionary representing the cluster hierarchy.
-    """
 
     return {
         "cluster_id": node.cluster_id,
+
+        "label": node.label,
+
         "depth": node.depth,
+
         "size": node.size,
+
         "resolution": node.resolution,
 
         "representative_sentences": [
@@ -189,11 +348,18 @@ def node_to_dict(
         ),
 
         "children": [
-            node_to_dict(child, sentences)
+            node_to_dict(
+                child,
+                sentences,
+            )
             for child in node.children
         ],
     }
 
+
+# -----------------------------------------------------------------------------
+# Save Tree
+# -----------------------------------------------------------------------------
 
 def save_tree(
     root: ClusterNode,
@@ -230,3 +396,7 @@ def save_tree(
             ensure_ascii=False,
             indent=2,
         )
+
+# -----------------------------------------------------------------------------
+# End of File
+# -----------------------------------------------------------------------------

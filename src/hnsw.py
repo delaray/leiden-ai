@@ -213,6 +213,9 @@ class ClusterNode:
     # Useful descriptive information
     representative_indices: list[int] = field(default_factory=list)
 
+    # Cluster label
+    label: str | None = None
+
     @property
     def size(self) -> int:
         """Return the number of sentence indices contained in this cluster."""
