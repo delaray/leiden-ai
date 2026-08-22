@@ -263,7 +263,14 @@ def print_tree(
     node: ClusterNode,
     sentences: list[str],
     max_examples: int = 2,
+    show_representatives: bool = False,
 ) -> None:
+    """Print the labeled cluster hierarchy.
+
+    Representative sentences are hidden by default. Set
+    ``show_representatives=True`` to include up to ``max_examples`` examples
+    beneath each node.
+    """
 
     indent = "    " * node.depth
 
@@ -276,20 +283,20 @@ def print_tree(
         f"{node.size:,} sentences]"
     )
 
-    for idx in node.representative_indices[
-        :max_examples
-    ]:
+    if show_representatives:
+        for idx in node.representative_indices[:max_examples]:
 
-        print(
-            f"{indent}    • {sentences[idx]}"
-        )
+            print(
+                f"{indent}    • {sentences[idx]}"
+            )
 
     for child in node.children:
 
         print_tree(
             child,
             sentences,
-            max_examples,
+            max_examples=max_examples,
+            show_representatives=show_representatives,
         )
 
 

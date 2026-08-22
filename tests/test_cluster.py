@@ -43,15 +43,25 @@ def test_node_to_dict_and_save_tree(tmp_path):
     assert loaded["children"][0]["cluster_id"] == "root.a"
 
 
-def test_print_tree_captures_output(capsys):
+def test_print_tree_hides_representatives_by_default(capsys):
     child = ClusterNode(cluster_id="root.child", depth=1, indices=np.array([0], dtype=np.int64), resolution=0.5)
     root = ClusterNode(cluster_id="root", depth=0, indices=np.array([0], dtype=np.int64), resolution=1.0, children=[child])
     root.representative_indices = [0]
     child.representative_indices = [0]
 
-    print_tree(root, ["one"], max_examples=1)
+    print_tree(root, ["one"])
 
     captured = capsys.readouterr().out
     assert "root" in captured
     assert "root.child" in captured
+    assert "one" not in captured
+
+
+def test_print_tree_can_show_representatives(capsys):
+    root = ClusterNode(cluster_id="root", depth=0, indices=np.array([0], dtype=np.int64), resolution=1.0)
+    root.representative_indices = [0]
+
+    print_tree(root, ["one"], max_examples=1, show_representatives=True)
+
+    captured = capsys.readouterr().out
     assert "one" in captured
