@@ -43,7 +43,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping  # noqa: UP035
 
 import hnswlib
 import numpy as np
@@ -69,7 +69,8 @@ def _resolve_device(device: str) -> str:
     if device == "cuda":
         if torch.cuda.is_available():
             return "cuda"
-        print("CUDA requested but not available on this system; using CPU instead.")
+        print("CUDA requested but not available on this system; "
+              "using CPU instead.")
         return "cpu"
     if device == "cpu":
         return "cpu"
@@ -167,14 +168,14 @@ class PipelineConfig:
             values = yaml.safe_load(config_file) or {}
 
         if not isinstance(values, Mapping):
-            raise ValueError(
+            raise ValueError(  # noqa: TRY004
                 f"Pipeline config must be a YAML mapping: {config_path}"
             )
 
         def section(name: str) -> dict[str, Any]:
             section_values = values.get(name, {})
             if not isinstance(section_values, Mapping):
-                raise ValueError(
+                raise ValueError(  # noqa: TRY004
                     f"Pipeline config section '{name}' must be a mapping"
                 )
             return dict(section_values)

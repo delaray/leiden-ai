@@ -5,18 +5,18 @@ embedding:
   normalize: true
 
 hnsw:
-  k: 30
+  k: 40
   M: 32
-  ef_construction: 200
-  ef_search: 100
-  min_similarity: 0.25
+  ef_construction: 250
+  ef_search: 120
+  min_similarity: 0.30
   num_threads: -1
 
 leiden:
-  resolution: 0.5
-  resolution_multiplier: 1.5
+  resolution: 0.4
+  resolution_multiplier: 1.6
   max_depth: 5
-  min_cluster_size: 50
-  min_child_size: 10
+  min_cluster_size: 150
+  min_child_size: 30
   n_iterations: 4
   seed: 42
