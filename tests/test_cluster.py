@@ -7,7 +7,14 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.cluster import add_representatives, node_to_dict, print_tree, save_tree
+from src.cluster import (
+    add_representatives,
+    load_taxonomy,
+    node_to_dict,
+    print_tree,
+    save_taxonomy,
+    save_tree,
+)
 from src.hnsw import ClusterNode
 
 
@@ -65,3 +72,54 @@ def test_print_tree_can_show_representatives(capsys):
 
     captured = capsys.readouterr().out
     assert "one" in captured
+
+
+def test_save_and_load_taxonomy(tmp_path):
+    child = ClusterNode(
+        cluster_id="root.child",
+        depth=1,
+        indices=np.array([0], dtype=np.int64),
+        resolution=0.5,
+        label="Child topic",
+    )
+    root = ClusterNode(
+        cluster_id="root",
+        depth=0,
+        indices=np.array([0, 1], dtype=np.int64),
+        resolution=1.0,
+        children=[child],
+        label="Root topic",
+    )
+    root.representative_indices = [1]
+    child.representative_indices = [0]
+    out_path = tmp_path / "taxonomy.json"
+
+    save_taxonomy(root, out_path)
+    taxonomy = load_taxonomy(out_path)
+
+    assert taxonomy == {
+        "name": "Root topic",
+        "size": 2,
+        "children": [
+            {
+                "name": "Child topic",
+                "size": 1,
+                "children": [],
+            },
+        ],
+    }
+    assert "representative_sentences" not in out_path.read_text(encoding="utf-8")
+
+
+def test_save_taxonomy_uses_print_tree_unlabeled_fallback(tmp_path):
+    root = ClusterNode(
+        cluster_id="root",
+        depth=0,
+        indices=np.array([0], dtype=np.int64),
+        resolution=1.0,
+    )
+    out_path = tmp_path / "taxonomy.json"
+
+    save_taxonomy(root, out_path)
+
+    assert load_taxonomy(out_path)["name"] == "Unlabeled"

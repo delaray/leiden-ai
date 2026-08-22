@@ -22,6 +22,10 @@ node_to_dict
     Converts a cluster tree to a nested dictionary for JSON export.
 save_tree
     Saves the cluster hierarchy to disk as JSON.
+save_taxonomy
+    Saves only node labels, cluster sizes, and hierarchy as JSON.
+load_taxonomy
+    Loads a taxonomy JSON file into a nested dictionary.
 """
 
 # ============================================================
@@ -380,6 +384,44 @@ def save_tree(
             ensure_ascii=False,
             indent=2,
         )
+
+
+# -----------------------------------------------------------------------------
+# Save and Load Taxonomy
+# -----------------------------------------------------------------------------
+
+def save_taxonomy(
+    root: ClusterNode,
+    filename: str | Path,
+) -> None:
+    """Save the label and size hierarchy without representative sentences."""
+
+    def taxonomy_node(node: ClusterNode) -> dict[str, object]:
+        return {
+            "name": node.label or "Unlabeled",
+            "size": node.size,
+            "children": [taxonomy_node(child) for child in node.children],
+        }
+
+    with Path(filename).open("w", encoding="utf-8") as taxonomy_file:
+        json.dump(
+            taxonomy_node(root),
+            taxonomy_file,
+            ensure_ascii=False,
+            indent=2,
+        )
+
+
+def load_taxonomy(filename: str | Path) -> dict[str, object]:
+    """Load a taxonomy previously written by :func:`save_taxonomy`."""
+
+    with Path(filename).open(encoding="utf-8") as taxonomy_file:
+        taxonomy = json.load(taxonomy_file)
+
+    if not isinstance(taxonomy, dict):
+        raise ValueError("Taxonomy root must be a JSON object")
+
+    return taxonomy
 
 # -----------------------------------------------------------------------------
 # End of File
