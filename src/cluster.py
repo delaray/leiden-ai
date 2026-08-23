@@ -37,9 +37,17 @@ from pathlib import Path
 
 import numpy as np
 import requests
+from dotenv import load_dotenv
 
 from src.hnsw import ClusterNode, LabelingConfig
 
+load_dotenv(override=True)
+
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "localhost:11434")
+
+# ------------------------------------------------------------------------------
+# Add Representatives
+# ------------------------------------------------------------------------------
 
 def add_representatives(
     node: ClusterNode,
@@ -106,7 +114,6 @@ def add_representatives(
             embeddings,
             n_representatives,
         )
-
 
 
 # ============================================================
@@ -177,7 +184,7 @@ def generate_cluster_label(
         """.strip()
 
     response = requests.post(
-        f"{config.ollama_url}/api/generate",
+        f"{OLLAMA_HOST}/api/generate",
         json={
             "model": config.model,
             "prompt": prompt,

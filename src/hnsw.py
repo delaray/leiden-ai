@@ -52,6 +52,7 @@ import hnswlib
 import numpy as np
 import torch
 import yaml
+import os
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
@@ -60,6 +61,7 @@ from src.utils import timing
 # Load environment variables from .env file if present
 load_dotenv(override=True)
 
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "localhost:11434")
 
 def _resolve_device(device: str) -> str:
     """Return a safe device string for the current machine.
@@ -155,9 +157,10 @@ class LeidenConfig:
 
 @dataclass
 class LabelingConfig:
-    """Configuration for labeling cluster nodes with an Ollama model."""
-
-    ollama_url: str = "http://192.168.1.32:11434"
+    """
+    Configuration for labeling cluster nodes with an Ollama model.
+    """
+    ollama_url: str = f"http://{OLLAMA_HOST}"
     model: str = "qwen3.8:27b"
     n_examples: int = 8
     max_label_words: int = 6
