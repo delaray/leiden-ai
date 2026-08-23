@@ -21,7 +21,6 @@ TAXONOMIES_DIR = os.path.join(DATA_DIR, "taxonomies")
 
 def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
                         device: str | None = None,
-                        output_path: str = "topic_hierarchy.json",
                         verbose: bool = True,
                         name: str = "topic",
                         ) -> dict[str, object]:
@@ -40,12 +39,13 @@ def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
         )
 
     # Save the topic tree to a JSON file
+    tree_path = os.path.join(TAXONOMIES_DIR, f"{name}_topic_tree.json")
     save_tree(
         result["tree"],
         result["sentences"],
-        output_path,
+        tree_path,
     )
-    print(f"\nSaved topic tree to: {output_path}")
+    print(f"\nSaved {name} topic tree to:\n{tree_path}")
 
     root_node = result["tree"]
     # Ensure taxonomies dir exists
@@ -87,6 +87,11 @@ def parse_args() -> ArgumentParser:
         help="Optional JSON path to save the resulting topic tree.",
     )
     parser.add_argument(
+        "--name",
+        default="topic",
+        help="Override the default taxonomy name.",
+    )
+    parser.add_argument(
         "--device",
         choices=["cpu", "cuda"],
         default=None,
@@ -117,6 +122,7 @@ def main() -> None:
         config=config,
         device=args.device,
         output_path=args.output,
+        name=args.name,
     )
 
 
