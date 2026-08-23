@@ -207,6 +207,10 @@ def generate_cluster_label(
             "model": config.model,
             "prompt": prompt,
             "stream": False,
+            # Cluster labels do not benefit from a long hidden reasoning pass.
+            # Disabling it also prevents thinking-capable models from timing
+            # out before returning their short final answer.
+            "think": config.think,
 
             # Low temperature is desirable because labeling
             # should be deterministic rather than creative.

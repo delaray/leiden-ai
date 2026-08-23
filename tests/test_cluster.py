@@ -123,3 +123,31 @@ def test_save_taxonomy_uses_print_tree_unlabeled_fallback(tmp_path):
     save_taxonomy(root, out_path)
 
     assert load_taxonomy(out_path)["name"] == "Unlabeled"
+
+
+def test_generate_cluster_label_disables_thinking(monkeypatch):
+    from src.cluster import generate_cluster_label
+    from src.hnsw import LabelingConfig
+
+    request_json = {}
+
+    class FakeResponse:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"response": "Vector Search"}
+
+    def fake_post(url, json, timeout):
+        request_json.update(json)
+        return FakeResponse()
+
+    monkeypatch.setattr("src.cluster.requests.post", fake_post)
+
+    label = generate_cluster_label(
+        ["HNSW retrieves similar embedding vectors."],
+        LabelingConfig(),
+    )
+
+    assert label == "Vector Search"
+    assert request_json["think"] is False

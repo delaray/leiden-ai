@@ -162,11 +162,12 @@ class LabelingConfig:
     """
     ollama_url: str = OLLAMA_HOST
     model: str = "qwen3.8:27b"
+    think: bool = False
     n_examples: int = 8
     max_label_words: int = 6
     max_depth: int | None = None
     min_cluster_size: int = 20
-    timeout: int = 120
+    timeout: int = 300
 
 
 @dataclass

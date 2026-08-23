@@ -23,8 +23,9 @@ leiden:
 
 labeling:
   model: qwen3.8:27b
+  think: false
   n_examples: 8
   max_label_words: 6
   max_depth: null
   min_cluster_size: 20
-  timeout: 120
+  timeout: 300
