@@ -44,7 +44,20 @@ from src.hnsw import ClusterNode, LabelingConfig
 
 load_dotenv(override=True)
 
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "localhost:11434")
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+
+
+def normalize_ollama_url(base_url: str) -> str:
+    """Return a valid HTTP URL for the Ollama server.
+
+    Accepts either a full URL like ``http://localhost:11434`` or a host:port
+    value like ``localhost:11434`` and normalizes both into a requestable
+    HTTP URL.
+    """
+    cleaned = base_url.strip().rstrip("/")
+    if "//" not in cleaned:
+        cleaned = f"http://{cleaned}"
+    return cleaned
 
 # ------------------------------------------------------------------------------
 # Add Representatives
@@ -184,8 +197,12 @@ def generate_cluster_label(
         Label:
         """.strip()
 
+    base_url = normalize_ollama_url(
+        getattr(config, "ollama_url", OLLAMA_HOST),
+    )
+
     response = requests.post(
-        f"{OLLAMA_HOST}/api/generate",
+        f"{base_url}/api/generate",
         json={
             "model": config.model,
             "prompt": prompt,

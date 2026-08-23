@@ -1,5 +1,7 @@
-from argparse import ArgumentParser
 import os
+from argparse import ArgumentParser
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 from src.cluster import print_tree, save_taxonomy, save_tree
@@ -21,7 +23,7 @@ def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
                         device: str | None = None,
                         output_path: str = "topic_hierarchy.json",
                         verbose: bool = True,
-                        name: str = "topic_taxonomy"
+                        name: str = "topic",
                         ) -> dict[str, object]:
     """
     Run the full Leiden topic-clustering pipeline on a corpus of sentences.
@@ -45,10 +47,14 @@ def run_leiden_pipeline(sentences: list[str], config: PipelineConfig,
     )
     print(f"\nSaved topic tree to: {output_path}")
 
-    # Save the taxonomy to a JSON file
     root_node = result["tree"]
+    # Ensure taxonomies dir exists
+    taxonomies_path = Path(TAXONOMIES_DIR)
+    taxonomies_path.mkdir(parents=True, exist_ok=True)
+    # Create the taxonomy file path
     taxonomy_path = \
         os.path.join(TAXONOMIES_DIR, f"{name}_taxonomy.json")
+    # Save the taxonomy to a JSON file
     save_taxonomy(root_node, taxonomy_path)
     print(f"\nSaved taxonomy to: {taxonomy_path}")
 

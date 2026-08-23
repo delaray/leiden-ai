@@ -61,7 +61,7 @@ from src.utils import timing
 # Load environment variables from .env file if present
 load_dotenv(override=True)
 
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "localhost:11434")
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 
 def _resolve_device(device: str) -> str:
     """Return a safe device string for the current machine.
@@ -160,7 +160,7 @@ class LabelingConfig:
     """
     Configuration for labeling cluster nodes with an Ollama model.
     """
-    ollama_url: str = f"http://{OLLAMA_HOST}"
+    ollama_url: str = OLLAMA_HOST
     model: str = "qwen3.8:27b"
     n_examples: int = 8
     max_label_words: int = 6
