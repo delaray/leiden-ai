@@ -121,7 +121,6 @@ def main() -> None:
         sentences=sentences,
         config=config,
         device=args.device,
-        output_path=args.output,
         name=args.name,
     )
 
