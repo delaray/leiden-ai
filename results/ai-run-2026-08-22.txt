@@ -1,0 +1,8 @@
+C:\projects\leiden-ai>python run_leiden.py ai_dataset.json --device cuda --name ai
+
+Saved ai topic tree to:
+/projects/data\taxonomies\ai_topic_tree.json
+
+Saved taxonomy to: /projects/data\taxonomies\ai_taxonomy.json
+
+main took 2865.19 minutes. (47.75 hours)
